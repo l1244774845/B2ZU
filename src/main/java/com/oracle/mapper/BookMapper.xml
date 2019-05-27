@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.mapper.BookMapper">
+	<resultMap id="BaseResultMap" type="com.oracle.web.bean.Book">
+		<id column="bid" jdbcType="INTEGER" property="bid" />
+		<result column="bname" jdbcType="VARCHAR" property="bname" />
+		<result column="price" jdbcType="VARCHAR" property="price" />
+		<result column="chubanshe" jdbcType="VARCHAR" property="chubanshe" />
+		<result column="zhuangtai" jdbcType="VARCHAR" property="zhuangtai" />
+		<result column="jieshuren" jdbcType="VARCHAR" property="jieshuren" />
+		<result column="f_id" jdbcType="INTEGER" property="fId" />
+	</resultMap>
+
+	<resultMap id="SubBookResultMap" type="SubBook">
+		<id column="bid" jdbcType="INTEGER" property="bid" />
+		<result column="bname" jdbcType="VARCHAR" property="bname" />
+		<result column="price" jdbcType="VARCHAR" property="price" />
+		<result column="chubanshe" jdbcType="VARCHAR" property="chubanshe" />
+		<result column="zhuangtai" jdbcType="VARCHAR" property="zhuangtai" />
+		<result column="jieshuren" jdbcType="VARCHAR" property="jieshuren" />
+		<association property="fenleis" javaType="Fenlei" column="f_id"
+			select="com.oracle.mapper.FenleiMapper.selectByPrimaryKey"></association>
+	</resultMap>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from book
+		where bid in
+		<foreach item="arr" collection="array" index="no" open="("
+			separator="," close=")">
+			#{arr}
+		</foreach>
+	</delete>
+	<insert id="insert" parameterType="com.oracle.web.bean.Book">
+		insert into book (bid, bname,
+		price, chubanshe, zhuangtai,
+		jieshuren, f_id)
+		values
+		(#{bid,jdbcType=INTEGER},
+		#{bname,jdbcType=VARCHAR},
+		#{price,jdbcType=VARCHAR},
+		#{chubanshe,jdbcType=VARCHAR},
+		"未借出",
+		#{jieshuren,jdbcType=VARCHAR},
+		#{fId,jdbcType=INTEGER})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.oracle.web.bean.Book">
+		update book
+		set
+		bname = #{bname,jdbcType=VARCHAR},
+		price = #{price,jdbcType=VARCHAR},
+		chubanshe = #{chubanshe,jdbcType=VARCHAR},
+		zhuangtai =
+		#{zhuangtai,jdbcType=VARCHAR},
+		jieshuren =
+		#{jieshuren,jdbcType=VARCHAR},
+		f_id = #{fId,jdbcType=INTEGER}
+		where bid
+		= #{bid,jdbcType=INTEGER}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select bid, bname, price, chubanshe, zhuangtai, jieshuren,
+		f_id
+		from book
+		where bid = #{bid,jdbcType=INTEGER}
+	</select>
+	<select id="queryBooks" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select * from book where bid in
+		<foreach item="arr" collection="array" index="no" open="("
+			separator="," close=")">
+			#{arr}
+		</foreach>
+	</select>
+	<select id="selectAll2" resultMap="BaseResultMap">
+		select * from book
+	</select>
+	<select id="selectAll" resultMap="SubBookResultMap">
+		select * from book
+	</select>
+	<select id="selectAllByPageHelper" resultMap="SubBookResultMap">
+		select * from book
+		order by bid DESC
+	</select>
+	<select id="selectAllByPageHelperAndWhere" resultMap="SubBookResultMap">
+		select * from book
+		<where>
+			<if test="fId != 0 ">
+				and f_id = #{fId,jdbcType=INTEGER}
+			</if>
+			<if test="bname != null and bname !='' ">
+				AND bname LIKE CONCAT(CONCAT('%',#{bname,jdbcType=VARCHAR},'%'))
+			</if>
+			<if test="price != null and price !='' ">
+				AND price LIKE CONCAT(CONCAT('%',#{price,jdbcType=VARCHAR},'%'))
+			</if>
+			<if test="chubanshe != null and chubanshe !='' ">
+				AND chubanshe LIKE CONCAT(CONCAT('%',#{chubanshe,jdbcType=VARCHAR},'%'))
+			</if>
+			<if test="zhuangtai != null and zhuangtai !='' ">
+				AND zhuangtai LIKE CONCAT(CONCAT('%',#{zhuangtai,jdbcType=VARCHAR},'%'))
+			</if>
+			<if test="jieshuren != null and jieshuren !='' ">
+				AND jieshuren LIKE CONCAT(CONCAT('%',#{jieshuren,jdbcType=VARCHAR},'%'))
+			</if>
+		</where>
+		order by bid ASC
+	</select>
+</mapper>
