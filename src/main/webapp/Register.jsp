@@ -253,10 +253,10 @@
 </head>
 <body>
 <table>
-		<tr background="imgs/11.jpg">
+		<tr background="imgs/15.jpg">
 			<td width="50%"></td>
 			<td align="center">
-				<form action="AdminServlet?action=register" method="post"
+				<form action="AdminHandler?action=register" method="post"
 					name="register" enctype="multipart/form-data"
 					onsubmit="return jiaoyan()">
 					<table frame="box" width="600px" height="280px" bordercolor="white">

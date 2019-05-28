@@ -92,10 +92,10 @@
 				size="6" color="silver">|</font>&nbsp;<font color="silver" size="5">登录</font>
 			</td>
 		</tr>
-		<tr background="./imgs/65.jpg">
+		<tr background="./imgs/15.jpg">
 			<td width="30%"></td>
 			<td align="center">
-				<form action="AdminServlet?action=login" method="post" name="login"
+				<form action="AdminHandler?action=login" method="post" name="login"
 					enctype="application/x-www-form-urlencoded"
 					onsubmit="return test()">
 					 <table frame="box" width="300px" height="280px" bordercolor="white"  class="table table-hover">
