@@ -15,12 +15,16 @@ public class FenleiServiceImpl implements FenleiService {
 
 	@Autowired
 	private FenleiMapper fenleiMapper;
-
+	
+	//图书用到的分类
+	
 	@Override
 	@Transactional(readOnly = true)
 	public List<Fenlei> list() {
 		// TODO Auto-generated method stub
 		return this.fenleiMapper.selectAll();
 	}
+	
+	//------------------------------------------
 
 }

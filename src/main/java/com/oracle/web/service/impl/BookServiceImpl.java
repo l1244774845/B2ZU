@@ -122,15 +122,21 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<Book> list2() {
+	public List<SubBook> list2() {
 		// TODO Auto-generated method stub
 		return this.bookMapper.selectAll2();
 	}
 
 	@Override
-	public List<Book> queryBooks(String[] arr) {
+	public List<SubBook> queryBooks(String[] arr) {
 		// TODO Auto-generated method stub
 		return this.bookMapper.queryBooks(arr);
+	}
+
+	@Override
+	public Book validateBName(String bname) {
+		// TODO Auto-generated method stub
+		return this.bookMapper.validateBName(bname);
 	}
 
 }

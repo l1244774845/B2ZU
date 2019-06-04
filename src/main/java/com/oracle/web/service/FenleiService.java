@@ -5,7 +5,11 @@ import java.util.List;
 import com.oracle.web.bean.Fenlei;
 
 public interface FenleiService {
+	
+	//图书用到的
 
 	List<Fenlei> list();
+	
+	//----------------------
 
 }

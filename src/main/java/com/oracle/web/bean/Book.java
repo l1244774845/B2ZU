@@ -88,6 +88,12 @@ public class Book {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	public String toString() {
+		return "Book [bid=" + bid + ", bname=" + bname + ", price=" + price + ", chubanshe=" + chubanshe
+				+ ", zhuangtai=" + zhuangtai + ", jieshuren=" + jieshuren + ", fId=" + fId + "]";
+	}
     
     
 }

@@ -16,7 +16,7 @@ public interface BookMapper {
 
     List<SubBook> selectAll();
     
-    List<Book> selectAll2();
+    List<SubBook> selectAll2();
 
     int updateByPrimaryKey(Book record);
 
@@ -24,6 +24,8 @@ public interface BookMapper {
 
 	List<SubBook> selectAllByPageHelperAndWhere(Book where);
 
-	List<Book> queryBooks(String[] arr);
+	List<SubBook> queryBooks(String[] arr);
+
+	Book validateBName(String bname);
     
 }

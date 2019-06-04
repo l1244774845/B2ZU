@@ -6,22 +6,37 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>添加图书</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script
+	src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<!-- 3.导入核心的css文件 -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<!-- 4.需要引入JQuery文件 -->
+<script type="text/javascript" src="bootstrap/js/jquery.js"></script>
+<!-- 5.引入BootStrap的核心JS文件 -->
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="js/ajax.js"></script>
 <script type="text/javascript">
 	var flag;
 
-	function validateBName() {
+	 function validateBName() {
 
 		var bname = document.add.bname;
 
 		var xmlhttp = getXMLHttpRequest();
-
-		xmlhttp.open("POST", "BookServlet", true);
+		
+		xmlhttp.open("POST", "yanzheng", true);
 
 		xmlhttp.setRequestHeader("Content-type",
 				"application/x-www-form-urlencoded");
 
-		xmlhttp.send("action=validateBName&bname=" + bname.value);
+		xmlhttp.send("bname="+bname.value);
 
 		var nameReg = /^[\u0391-\uFFE5_A-z0-9]{1,15}$/;
 
@@ -29,15 +44,13 @@
 
 		if (nameReg.test(bname.value)) {
 
-			//bnameMsg.style.color = "darkcyan";
-
-			//bnameMsg.innerHTML = "姓名合法";		
-
 			xmlhttp.onreadystatechange = function() {
 
 				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 
 					var content = xmlhttp.responseText;
+					
+					//alert(content);
 
 					var span = document.getElementById("bNameMsg");
 
@@ -72,9 +85,10 @@
 			bNameMsg.innerHTML = "必须是长度为1-15的汉字字母数字下划线";
 
 			flag = false;
+			
 		}
 
-	}
+	} 
 
 	//2.校验价格
 	function validatePrice() {
@@ -99,10 +113,69 @@
 			priceMsg.innerHTML = "价格格式不合法，正确格式为  52.11 或   52 或0.99";
 
 			flag = false;
+			
 		}
 
 	}
 
+	//2.校验出版社
+	function validatechubanshe() {
+
+		var chubanshe = document.add.chubanshe;
+
+		var reg = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/;
+
+		var chubansheMsg = document.getElementById("chubansheMsg");
+
+		if (reg.test(chubanshe.value)) {
+
+			chubansheMsg.style.color = "darkcyan";
+
+			chubansheMsg.innerHTML = "出版社格式合法";
+
+			flag = true;
+			
+		} else {
+
+			chubansheMsg.style.color = "red";
+
+			chubansheMsg.innerHTML = "出版社格式不合法";
+
+			flag = false;
+			
+		}
+
+	}
+	
+	//2.校验人名
+	function validatejieshuren() {
+
+		var jieshuren = document.add.jieshuren;
+
+		var reg = /^[\u4E00-\u9FA5A-Za-z]+$/;
+
+		var jieshurenMsg = document.getElementById("jieshurenMsg");
+
+		if (reg.test(jieshuren.value)) {
+
+			jieshurenMsg.style.color = "darkcyan";
+
+			jieshurenMsg.innerHTML = "姓名格式合法";
+
+			flag = true;
+		} else {
+
+			jieshurenMsg.style.color = "red";
+
+			jieshurenMsg.innerHTML = "姓名格式不合法";
+
+			flag = false;
+			
+		}
+
+	}
+
+	
 	function addb() {
 
 		//alert(flag);
@@ -135,8 +208,8 @@
 
 			<tr align="center">
 				<td width="100px">图&nbsp;书&nbsp;名&nbsp;称:</td>
-				<td width="290px"><input type="text" name="bname"
-					onblur="validateBName()" /></td>
+				<td width="290px"><input type="text" name="bname" onblur="validateBName()"
+					 /></td>
 				<td><span id="bNameMsg"></span></td>
 			</tr>
 
@@ -149,8 +222,8 @@
 
 			<tr align="center">
 				<td width="100px">出&nbsp;&nbsp;&nbsp;版&nbsp;&nbsp;&nbsp;社:</td>
-				<td><input type="text" name="chubanshe" /></td>
-				<td><span></span></td>
+				<td><input type="text" name="chubanshe" onblur="validatechubanshe()" /></td>
+				<td><span id= "chubansheMsg"></span></td>
 			</tr>
 
 			<tr align="center">
@@ -161,8 +234,8 @@
 			</tr>
 			<tr align="center">
 				<td width="100px">借&nbsp;&nbsp;&nbsp;书&nbsp;&nbsp;&nbsp;人:</td>
-				<td><input type="text" name="jieshuren" /></td>
-				<td><span></span></td>
+				<td><input type="text" name="jieshuren" value="无" onblur="validatejieshuren()" /></td>
+				<td><span id="jieshurenMsg"></span></td>
 			</tr>
 			<tr align="center">
 				<td colspan="3"><input type="submit" value="添加" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input

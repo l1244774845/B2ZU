@@ -20,10 +20,12 @@ public interface BookService {
 
 	List<SubBook> list();
 	
-	List<Book> list2();
+	List<SubBook> list2();
 
 	PageBean<SubBook> selectAllByPageHelperAndWhere(Book where, int pageNow);
 
-	List<Book> queryBooks(String[] arr);
+	List<SubBook> queryBooks(String[] arr);
+
+	Book validateBName(String bname);
 	
 }

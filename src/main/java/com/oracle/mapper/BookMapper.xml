@@ -40,7 +40,7 @@
 		#{price,jdbcType=VARCHAR},
 		#{chubanshe,jdbcType=VARCHAR},
 		"未借出",
-		#{jieshuren,jdbcType=VARCHAR},
+		"无",
 		#{fId,jdbcType=INTEGER})
 	</insert>
 	<update id="updateByPrimaryKey" parameterType="com.oracle.web.bean.Book">
@@ -64,15 +64,20 @@
 		from book
 		where bid = #{bid,jdbcType=INTEGER}
 	</select>
+	
+	<select id="validateBName" parameterType="java.lang.String" resultMap="BaseResultMap">
+	    select * from book where bname = #{bname,jdbcType=VARCHAR}
+	</select>
+	
 	<select id="queryBooks" parameterType="java.lang.String"
-		resultMap="BaseResultMap">
+		resultMap="SubBookResultMap">
 		select * from book where bid in
 		<foreach item="arr" collection="array" index="no" open="("
 			separator="," close=")">
 			#{arr}
 		</foreach>
 	</select>
-	<select id="selectAll2" resultMap="BaseResultMap">
+	<select id="selectAll2" resultMap="SubBookResultMap">
 		select * from book
 	</select>
 	<select id="selectAll" resultMap="SubBookResultMap">

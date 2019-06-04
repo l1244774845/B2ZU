@@ -27,6 +27,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.oracle.web.bean.Book;
 import com.oracle.web.bean.Fenlei;
 import com.oracle.web.bean.PageBean;
@@ -44,13 +46,39 @@ public class BookHandler {
 
 	@Autowired
 	private FenleiService fenleiService;
-	
+
+	// 验证图书
+
+	@RequestMapping(value = "/yanzheng", method = RequestMethod.POST)
+	public void yanzheng(@RequestParam("bname") String bname, HttpServletResponse resp) throws IOException {
+
+		// System.out.println(bname);
+
+		Book b = bookService.validateBName(bname);
+
+		if (b != null) {
+
+			resp.getWriter().write("1");
+		} else {
+
+			resp.getWriter().write("0");
+
+		}
+
+	}
+
+	// 高级搜索
+
 	@RequestMapping(value = "/bookByWhere/{pageNow}", method = RequestMethod.GET)
 	public String ByWhere(Book where, @PathVariable("pageNow") int pageNow, HttpServletRequest request) {
 
 		PageBean<SubBook> pb = bookService.selectAllByPageHelperAndWhere(where, pageNow);
 
 		request.setAttribute("pb", pb);
+		
+		List<Fenlei> list = fenleiService.list();
+
+		request.setAttribute("flist", list);
 
 		return "ShowBooks";
 
@@ -65,7 +93,7 @@ public class BookHandler {
 
 		req.setAttribute("flist", list);
 
-		//System.out.println(list);
+		// System.out.println(list);
 
 		return "AddBooks";
 
@@ -87,8 +115,8 @@ public class BookHandler {
 	@RequestMapping(value = "/book/{booksId}", method = RequestMethod.DELETE)
 	public String delete(@PathVariable("booksId") String ids) {
 
-		String[] arr=ids.split(",");
-		
+		String[] arr = ids.split(",");
+
 		bookService.delete(arr);
 
 		return "redirect:/books/1";
@@ -134,7 +162,7 @@ public class BookHandler {
 
 		request.setAttribute("pb", pb);
 
-		//System.out.println(pb);
+		// System.out.println(pb);
 
 		List<Fenlei> list = fenleiService.list();
 
@@ -143,18 +171,19 @@ public class BookHandler {
 		return "ShowBooks";
 
 	}
-	
-	//导出选择
-	
-	@RequestMapping(value = "/outSelect/{booksIds}", method = RequestMethod.GET)
-	public String outSelect(@PathVariable("booksIds") String ids,HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-		String[] arr=ids.split(",");
-				
-		List<Book> list = bookService.queryBooks(arr);
-		
+	// 导出选择
+
+	@RequestMapping(value = "/outSelect/{booksIds}", method = RequestMethod.GET)
+	public String outSelect(@PathVariable("booksIds") String ids, HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
+
+		String[] arr = ids.split(",");
+
+		List<SubBook> list = bookService.queryBooks(arr);
+
 		String key = "选择";
-		
+
 		// 1.创建一个工作簿
 
 		HSSFWorkbook workbook = new HSSFWorkbook();
@@ -185,7 +214,7 @@ public class BookHandler {
 
 		style.setFont(font);
 
-		String[] title = { "编号","图书名称","价格","出版社","借书人","状态","分类编号"};
+		String[] title = { "编号", "图书名称", "价格", "出版社", "借书人", "状态", "分类编号","分类名称" };
 
 		HSSFRow row = sheet.createRow(0);// 从0开始,第一行
 
@@ -201,7 +230,8 @@ public class BookHandler {
 
 		// 4.把list里面的数据放进去
 
-	//	List<Fenlei> list = FenleiServiceFactory.getFenleiServiceImpl().showFenlei();
+		// List<Fenlei> list =
+		// FenleiServiceFactory.getFenleiServiceImpl().showFenlei();
 
 		// 在创建一个样式对象
 
@@ -215,7 +245,7 @@ public class BookHandler {
 
 			HSSFRow row2 = sheet.createRow(i + 1);// 从第二行开始 1 2 3 4 5
 
-			Book b= list.get(i);
+			SubBook b = list.get(i);
 
 			HSSFCell cell1 = row2.createCell(0);
 
@@ -228,36 +258,42 @@ public class BookHandler {
 			cell2.setCellStyle(style2);
 
 			cell2.setCellValue(b.getBname());
-			
+
 			HSSFCell cell3 = row2.createCell(2);
 
 			cell3.setCellStyle(style2);
 
 			cell3.setCellValue(b.getPrice());
-			
+
 			HSSFCell cell4 = row2.createCell(3);
 
 			cell4.setCellStyle(style2);
 
 			cell4.setCellValue(b.getChubanshe());
-			
+
 			HSSFCell cell5 = row2.createCell(4);
 
 			cell5.setCellStyle(style2);
 
 			cell5.setCellValue(b.getJieshuren());
-			
+
 			HSSFCell cell6 = row2.createCell(5);
 
 			cell6.setCellStyle(style2);
 
 			cell6.setCellValue(b.getZhuangtai());
-			
+
 			HSSFCell cell7 = row2.createCell(6);
 
 			cell7.setCellStyle(style2);
 
-			cell7.setCellValue(b.getfId());
+			cell7.setCellValue(b.getFenleis().getfId());
+
+			HSSFCell cell8 = row2.createCell(7);
+
+			cell8.setCellStyle(style2);
+
+			cell8.setCellValue(b.getFenleis().getFname());
 
 		}
 
@@ -277,8 +313,8 @@ public class BookHandler {
 
 		String mime = req.getSession().getServletContext().getMimeType(file);
 
-		String fileName=DownUtils.filenameEncoding(key+f.getName(), req);
-		
+		String fileName = DownUtils.filenameEncoding(key + f.getName(), req);
+
 		String disposition = "attachment;filename=" + fileName;
 
 		// 设置两个响应头信息即可 (两个头)，告诉浏览器，我这个东西是下载的
@@ -300,19 +336,20 @@ public class BookHandler {
 		// 复制
 
 		IOUtils.copy(inputStream, out);
-		
+
 		return null;
 
 	}
 
-
+	//导出全部
+	
 	@RequestMapping(value = "/outAll", method = RequestMethod.GET)
 	public String outAll(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-		List<Book> list = bookService.list2();
-		
+		List<SubBook> list = bookService.list2();
+
 		String key = "全部";
-		
+
 		// 1.创建一个工作簿
 
 		HSSFWorkbook workbook = new HSSFWorkbook();
@@ -343,7 +380,7 @@ public class BookHandler {
 
 		style.setFont(font);
 
-		String[] title = { "编号","图书名称","价格","出版社","借书人","状态","分类编号"};
+		String[] title = { "编号", "图书名称", "价格", "出版社", "借书人", "状态", "分类编号","分类名称" };
 
 		HSSFRow row = sheet.createRow(0);// 从0开始,第一行
 
@@ -359,7 +396,8 @@ public class BookHandler {
 
 		// 4.把list里面的数据放进去
 
-	//	List<Fenlei> list = FenleiServiceFactory.getFenleiServiceImpl().showFenlei();
+		// List<Fenlei> list =
+		// FenleiServiceFactory.getFenleiServiceImpl().showFenlei();
 
 		// 在创建一个样式对象
 
@@ -373,7 +411,7 @@ public class BookHandler {
 
 			HSSFRow row2 = sheet.createRow(i + 1);// 从第二行开始 1 2 3 4 5
 
-			Book b= list.get(i);
+			SubBook b = list.get(i);
 
 			HSSFCell cell1 = row2.createCell(0);
 
@@ -386,25 +424,25 @@ public class BookHandler {
 			cell2.setCellStyle(style2);
 
 			cell2.setCellValue(b.getBname());
-			
+
 			HSSFCell cell3 = row2.createCell(2);
 
 			cell3.setCellStyle(style2);
 
 			cell3.setCellValue(b.getPrice());
-			
+
 			HSSFCell cell4 = row2.createCell(3);
 
 			cell4.setCellStyle(style2);
 
 			cell4.setCellValue(b.getChubanshe());
-			
+
 			HSSFCell cell5 = row2.createCell(4);
 
 			cell5.setCellStyle(style2);
 
 			cell5.setCellValue(b.getJieshuren());
-			
+
 			HSSFCell cell6 = row2.createCell(5);
 
 			cell6.setCellStyle(style2);
@@ -415,7 +453,13 @@ public class BookHandler {
 
 			cell7.setCellStyle(style2);
 
-			cell7.setCellValue(b.getfId());
+			cell7.setCellValue(b.getFenleis().getfId());
+
+			HSSFCell cell8 = row2.createCell(7);
+
+			cell8.setCellStyle(style2);
+
+			cell8.setCellValue(b.getFenleis().getFname());
 
 		}
 
@@ -435,8 +479,8 @@ public class BookHandler {
 
 		String mime = req.getSession().getServletContext().getMimeType(file);
 
-		String fileName=DownUtils.filenameEncoding(key+f.getName(), req);
-		
+		String fileName = DownUtils.filenameEncoding(key + f.getName(), req);
+
 		String disposition = "attachment;filename=" + fileName;
 
 		// 设置两个响应头信息即可 (两个头)，告诉浏览器，我这个东西是下载的
@@ -458,7 +502,7 @@ public class BookHandler {
 		// 复制
 
 		IOUtils.copy(inputStream, out);
-		
+
 		return null;
 
 	}
