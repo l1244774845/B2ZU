@@ -93,6 +93,9 @@
 			<if test="fId != 0 ">
 				and f_id = #{fId,jdbcType=INTEGER}
 			</if>
+			<if test="zhuangtai != null and zhuangtai !='' ">
+				AND zhuangtai = #{zhuangtai,jdbcType=VARCHAR}
+			</if>
 			<if test="bname != null and bname !='' ">
 				AND bname LIKE CONCAT(CONCAT('%',#{bname,jdbcType=VARCHAR},'%'))
 			</if>
@@ -101,9 +104,6 @@
 			</if>
 			<if test="chubanshe != null and chubanshe !='' ">
 				AND chubanshe LIKE CONCAT(CONCAT('%',#{chubanshe,jdbcType=VARCHAR},'%'))
-			</if>
-			<if test="zhuangtai != null and zhuangtai !='' ">
-				AND zhuangtai LIKE CONCAT(CONCAT('%',#{zhuangtai,jdbcType=VARCHAR},'%'))
 			</if>
 			<if test="jieshuren != null and jieshuren !='' ">
 				AND jieshuren LIKE CONCAT(CONCAT('%',#{jieshuren,jdbcType=VARCHAR},'%'))

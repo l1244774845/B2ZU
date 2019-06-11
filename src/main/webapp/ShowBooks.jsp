@@ -386,7 +386,7 @@
 	<center>
 		<p>第${pb.pageNow }页/共${pb.pages }页</p>
 		<ul class="pagination">
-			<li><a href="1">首页</a></li>
+			<li><a href="1?${pb.url }">首页</a></li>
 			<%-- <li><c:if test="${pb.pageNow>1 }">
 				<a href="${pb.pageNow-1 }">上一页</a>
 			</c:if></li> --%>
@@ -416,13 +416,13 @@
 						<li class="active"><span>${i}</span></li>
 					</c:when>
 					<c:otherwise>
-						<li><span><a href="${i }">${i }</a></span></li>
+						<li><span><a href="${i }?${pb.url }">${i }</a></span></li>
 					</c:otherwise>
 				</c:choose>
 
 			</c:forEach>
 
-			<li><span><a href="${pb.pages }">尾页</a></span></li>
+			<li><span><a href="${pb.pages }?${pb.url }">尾页</a></span></li>
 
 		</ul>
 

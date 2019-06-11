@@ -8,6 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body background="./imgs">
+</br>
 	<center>
 		<p>
 			<font color="black" size="6">修改图书</font>
@@ -17,7 +18,7 @@
 	<br>
 
 	<center>
-		<form action="http://localhost:8080/ssm_crud/book" method="post">
+		<form action="http://localhost:8080/ssm_crud/book" method="post" >
 
 			<input type="hidden" name="_method" value="PUT" /> <input
 				type="hidden" name="bid" value="${b.bid }" />
@@ -26,7 +27,7 @@
 				bordercolor="silver" cellspacing="0";>
 				<tr align="center">
 					<td>请选择分类:</td>
-					<td><select name="fId" class="form-control">
+					<td><select name="fId">
 							<c:forEach items="${slist }" var="f">
 								<c:if test="${f.fId == b.fId}">
 									<option value="${f.fId }" selected="selected">${f.fname }</option>
@@ -36,19 +37,23 @@
 								</c:if>
 							</c:forEach>
 					</select></td>
+					
 				</tr>
 				<tr align="center">
 					<td>图&nbsp;书&nbsp;名&nbsp;称:</td>
 					<td><input type="text" name="bname" value="${b.bname }"></td>
+				
 				</tr>
 				<tr align="center">
 					<td>图&nbsp;书&nbsp;价&nbsp;格:</td>
 					<td><input type="text" name="price" value="${b.price }"></td>
+				
 				</tr>
 				<tr align="center">
 					<td>出&nbsp;&nbsp;&nbsp;版&nbsp;&nbsp;&nbsp;社:</td>
 					<td><input type="text" name="chubanshe"
 						value="${b.chubanshe }"></td>
+						
 				</tr>
 				<tr align="center">
 					<td>状&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;态:</td>
@@ -59,16 +64,22 @@
 							<input type="radio" name="zhuangtai" value="未借出" checked />未借出&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
 								type="radio" name="zhuangtai" value="借出" />借出
 					</c:if></td>
+					
 				</tr>
 				<tr align="center">
 					<td>借&nbsp;&nbsp;&nbsp;书&nbsp;&nbsp;&nbsp;人:</td>
 					<td><input type="text" name="jieshuren"
 						value="${b.jieshuren }"></td>
+						
 				</tr>
 				<tr align="center">
-					<td colspan="2"><input type="submit" value="修改">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-						type="reset" value="重置"></td>
+					<td colspan="2">
+					<button class="btn btn-info" type="submit" >修改</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button class="btn btn-info" type="reset" >重置</button>
+						
 				</tr>
+				
 			</table>
 		</form>
 	</center>

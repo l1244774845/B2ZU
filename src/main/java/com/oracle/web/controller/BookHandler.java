@@ -46,13 +46,61 @@ public class BookHandler {
 
 	@Autowired
 	private FenleiService fenleiService;
+	
+	private String getURL2(HttpServletRequest req) {
+
+		String url=this.getURL(req);
+		
+	    int index=url.lastIndexOf("/");
+	    
+	    System.out.println(url.substring(index+3));
+	    
+	    if(index==-1){
+	    	
+	    	return url;
+	    }
+	    	    
+		return url.substring(index+3);
+	}
+
+	private String getURL(HttpServletRequest req) {
+
+		String path=req.getContextPath();
+				
+		String servlet=req.getServletPath();
+				
+		String param=req.getQueryString();
+				
+		return path+servlet+"?"+param;
+		
+	}
+	
+
+	// 高级搜索
+
+	@RequestMapping(value = "/bookByWhere/{pageNow}", method = RequestMethod.GET)
+	public String ByWhere(Book where, @PathVariable("pageNow") int pageNow, HttpServletRequest request) {
+		
+		String url=this.getURL2(request);
+
+		PageBean<SubBook> pb = bookService.selectAllByPageHelperAndWhere(where, pageNow);
+		
+		pb.setUrl(url);
+
+		request.setAttribute("pb", pb);
+		
+		List<Fenlei> list = fenleiService.list();
+
+		request.setAttribute("flist", list);
+
+		return "ShowBooks";
+
+	}
 
 	// 验证图书
 
 	@RequestMapping(value = "/yanzheng", method = RequestMethod.POST)
 	public void yanzheng(@RequestParam("bname") String bname, HttpServletResponse resp) throws IOException {
-
-		// System.out.println(bname);
 
 		Book b = bookService.validateBName(bname);
 
@@ -64,23 +112,6 @@ public class BookHandler {
 			resp.getWriter().write("0");
 
 		}
-
-	}
-
-	// 高级搜索
-
-	@RequestMapping(value = "/bookByWhere/{pageNow}", method = RequestMethod.GET)
-	public String ByWhere(Book where, @PathVariable("pageNow") int pageNow, HttpServletRequest request) {
-
-		PageBean<SubBook> pb = bookService.selectAllByPageHelperAndWhere(where, pageNow);
-
-		request.setAttribute("pb", pb);
-		
-		List<Fenlei> list = fenleiService.list();
-
-		request.setAttribute("flist", list);
-
-		return "ShowBooks";
 
 	}
 

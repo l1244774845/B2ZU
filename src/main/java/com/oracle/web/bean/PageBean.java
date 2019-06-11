@@ -16,6 +16,16 @@ public class PageBean<SubMonster> implements Serializable{
 	private int pageSize;//һҳ��ʽ������
 	
 	private List<SubMonster>  beanList;//��ҳ������
+	
+	private String url;
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
 	public int getPageNow() {
 		return pageNow;
