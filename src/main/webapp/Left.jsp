@@ -22,7 +22,7 @@ a {
 <script type="text/javascript">
 	$(function() {
 
-		$("#accordion").accordion();
+		/* $("#accordion").accordion(); */
 
 		$("#btn1").button({
 
@@ -83,17 +83,17 @@ a {
 	<div id="accordion">
 		<h3>分类管理</h3>
 
-		<div id="classfies">
+		<div id="Fenlei">
 			<div frame="void" height="80px" align="center" cellspacing="0"
 				width="100px">
 				<ul align="center">
 					<li><span class="ui-icon ui-icon-plusthick"></span><a
-						href="AddClassfies.jsp" target="right"><input type="button"
+						href="AddFenLei.jsp" target="right"><input type="button"
 							value="添加分类" id="btn1" /></a></li>
 				</ul>
 				<ul align="center">
 					<li><span class="ui-icon ui-icon-zoomin"></span><a
-						href="FenLeiServlet?action=ShowClassfiespage" target="right"><input
+						href="ShowFenLei" target="right"><input
 							type="button" value="查看分类" id="btn2"></a></li>
 				</ul>
 				<ul align="center">
@@ -103,8 +103,8 @@ a {
 				</ul>
 			</div>
 		</div>
-		
 		<h3>图书管理</h3>
+
 
 		<div id="booksmanage">
 			<div frame="void" height="80px" align="center" cellspacing="0"
@@ -135,7 +135,7 @@ a {
 				</ul>
 				<ul align="center">
 					<li><span class="ui-icon ui-icon-battery-3"></span><a
-						href="UserServlet?action=ShowUsers" target="right"><input
+						href="User" target="right"><input
 							type="button" value="查看用户" id="btn7" /></a></li>
 				</ul>
 			</div>
@@ -148,7 +148,7 @@ a {
 				width="100px">
 				<ul align="center">
 					<li><span class="ui-icon ui-icon-lightbulb"></span><a
-						href="ShowAdmin.jsp" target="right"><input type="button"
+						href="showAdmin" target="right"><input type="button"
 							value="查看管理员" id="btn8" /></a></li>
 				</ul>
 				<ul align="center">
@@ -157,9 +157,12 @@ a {
 							value="修改密码" id="btn9" /></a></li>
 				</ul>
 				<ul align="center">
-					<li><span class="ui-icon ui-icon-power"></span><a
-						href="AdminServlet?action=exit" target="_parent"><input
-							type="button" value="退出登录" id="btn10" /></a></li>
+					<li>
+						<span class="ui-icon ui-icon-power"></span>
+						<a href="exit" target="_parent">
+							<input type="button" value="退出登录" id="btn10" />
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>

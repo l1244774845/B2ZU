@@ -4,85 +4,177 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>修改分类</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--移动设备优先 -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+<!--导入核心css文件 -->
+<script type="text/javascript" src="bootstrap/js/jquery.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+
 <script type="text/javascript" src="js/ajax.js"></script>
+<title>修改密码</title>
 <script type="text/javascript">
-	window.onload = function() {
+	var flag;
 
-		var http = getXMLHttpRequest();
+	function queryByPassword() {
 
-		var select = document.getElementById("fenleiList");
+		var password = document.changepassword.password;
 
-		http.open("POST", "FenLeiServlet", true);
+		var pwMsg = document.getElementById("pwMsg");
 
-		http.setRequestHeader("Content-type",
-				"application/x-www-form-urlencoded");
+		ajax({
 
-		http.send("action=updateShowClassfies");
+			method : "POST",
+			url : "queryByPassword",
+			params : "password=" + password.value,
+			type : "text",
+			success : function(data) {
 
-		http.onreadystatechange = function() {
+				if (data !=null) {//找到用户名
 
-			if (http.readyState == 4 && http.status == 200) {
+					pwMsg.style.color = "chartreuse";
 
-				var content = http.responseXML;
+					pwMsg.innerHTML = "原密码输入正确!";
 
-				var names = content.getElementsByTagName("name");
+					flag = true;
 
-				for (var i = 0; i < names.length; i++) {
+				} else {//没找到用户名
 
-					var name = names[i];
+					pwMsg.style.color = "red";
 
-					var opt = document.createElement("option");
+					pwMsg.innerHTML = "原密码输入错误，请重新输入!";
 
-					var value;
+					password.focus();
 
-					if (window.addEventListener) {
-
-						value = name.textContentl
-					} else {
-
-						value = text;
-					}
-
-					opt.innerHTML = value;
-
-					opt.value = value;
-
-					select.appendChild(opt);
+					flag = false;
 
 				}
+
 			}
 
+		});
+
+	}
+
+	//校验新密码
+	function queryBynewPassword() {
+		
+		var password = document.changepassword.password;
+		
+		var newpassword = document.changepassword.newpassword;
+		
+		var reg = /^(\w|\w){6,15}$/;
+
+		var npwMsg = document.getElementById("npwMsg");
+
+		var password = document.changepassword.password;
+
+		if (!reg.test(newpassword.value)) {//格式不匹配
+
+			npwMsg.style.color = "red";
+
+			npwMsg.innerHTML = "新密码必须是6位以上的数字，字母，或者_!";
+
+			return false;
+
 		}
+
+		if (password.value == newpassword.value) {
+
+			npwMsg.style.color = "red";
+
+			npwMsg.innerHTML = "新密码不能和原密码一样";
+
+			return false;
+
+		}
+
+		npwMsg.style.color = "chartreuse";
+
+		npwMsg.innerHTML = "新密码可用!";
+
+		return true;
+
+	}
+	
+	//确认密码
+
+	function queryByrePassword() {
+
+		var newpassword=document.changepassword.newpassword;
+		
+		var repassword=document.changepassword.repassword;
+		
+		var rpwMsg=document.getElementById("rpwMsg");
+		
+		if(repassword.value==newpassword.value){
+			
+			rpwMsg.style.color="chartreuse";
+			
+			rpwMsg.innerHTML="两次密码一致";
+			
+			flag=true;
+		}else{
+			
+			rpwMsg.style.color="red";
+			
+			rpwMsg.innerHTML="抱歉两次密码不一致！";
+			
+			flag=false;
+			
+		}
+
+	}
+
+	function test() {
+
+		return flag && queryBynewPassword() && queryByrePassword();
 
 	}
 </script>
 </head>
-<body background="./imgs/11.jpg">
-	<form action="FenLeiServlet?action=updateShowClassfies" method="post">
-		<table align="center" width="400px" height="200px" border="1px"
-			cellspacing="0" bordercolor="silver">
-			<caption align="top">
-
-				<font color="red">修改分类页面</font>
-
-			</caption>
-			<tr align="center">
-				<td>请选择您要修改的分类</td>
-				<td><select name="name" id="fenleiList">
-						<option>---请选择要修改的分类---</option>
-				</select>
-				</td>
-			</tr>
-			<tr align="center">
-				<td>请输入新的分类名称:</td>
-				<td><input type="text" name="newname" /></td>
-			</tr>
-			<tr align="center">
-				<td colspan="2"><input type="reset" value="修改" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-					type="reset" value="清空" /></td>
-			</tr>
-		</table>
-	</form>
+<body background="imgs/15.jpg">
+	<div class="container">
+		<h1 align="center">修改密码</h1>
+		<hr width="1000px">
+		<form name="changepassword" action="changePassword" class="form-horizontal" method="post" onsubmit="return rest()">
+		
+		
+			<div class="form-group">
+				<label for="password" class="col-sm-4 control-label">原密码</label>
+				<div class="col-sm-4">
+					<input name="password" type="password" onblur="queryByPassword()" class="form-control" id="password"/>
+					<span id="pwMsg"></span>
+				</div>	
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="newpassword" class="col-sm-4 control-label">新密码</label>
+				<div class="col-sm-4">
+					<input type="password" name="newpassword" class="form-control" id="newpassword" onblur="queryBynewPassword()"/>
+					<span id="npwMsg"></span>
+				</div>	
+			</div>
+			
+			<div class="form-group">
+				<label for="rePassword" class="col-sm-4 control-label">确认密码</label>
+				<div class="col-sm-4">
+					<input type="password" name="rePassword" class="form-control" id="rePassword" onblur="queryByrePassword()"/>
+					<span id="rpwMsg"></span>
+				</div>	
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-offset-4 col-sm-4">
+					<button type="submit" class="btn btn-info">点击修改</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type="reset" class="btn btn-info">重新填写</button>
+				</div>
+			</div>
+			
+			
+		</form>
+	</div>
 </body>
 </html>

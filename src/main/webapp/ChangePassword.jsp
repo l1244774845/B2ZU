@@ -4,12 +4,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--移动设备优先 -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+<!--导入核心css文件 -->
+<script type="text/javascript" src="bootstrap/js/jquery.js"></script>
+<script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+
 <script type="text/javascript" src="js/ajax.js"></script>
+<title>修改密码</title>
 <script type="text/javascript">
 	var flag;
 
-	function validatepassword() {
+	function queryByPassword() {
 
 		var password = document.changepassword.password;
 
@@ -18,14 +25,14 @@
 		ajax({
 
 			method : "POST",
-			url : "AdminServlet",
-			params : "action=ValidatePassword&password=" + password.value,
+			url : "queryByPassword",
+			params : "password=" + password.value,
 			type : "text",
 			success : function(data) {
 
-				if (data == "1") {//找到用户名
+				if (data !=null) {//找到用户名
 
-					pwMsg.style.color = "green";
+					pwMsg.style.color = "chartreuse";
 
 					pwMsg.innerHTML = "原密码输入正确!";
 
@@ -50,11 +57,13 @@
 	}
 
 	//校验新密码
-	function validateNewPassword() {
-
-		var reg = /^\w{6,}$/;
-
+	function queryBynewPassword() {
+		
+		var password = document.changepassword.password;
+		
 		var newpassword = document.changepassword.newpassword;
+		
+		var reg = /^(\w|\w){6,15}$/;
 
 		var npwMsg = document.getElementById("npwMsg");
 
@@ -80,15 +89,17 @@
 
 		}
 
-		npwMsg.style.color = "green";
+		npwMsg.style.color = "chartreuse";
 
 		npwMsg.innerHTML = "新密码可用!";
 
 		return true;
 
 	}
+	
+	//确认密码
 
-	function validateRePassword() {
+	function queryByrePassword() {
 
 		var newpassword=document.changepassword.newpassword;
 		
@@ -98,7 +109,7 @@
 		
 		if(repassword.value==newpassword.value){
 			
-			rpwMsg.style.color="green";
+			rpwMsg.style.color="chartreuse";
 			
 			rpwMsg.innerHTML="两次密码一致";
 			
@@ -117,48 +128,53 @@
 
 	function test() {
 
-		return flag && validateNewPassword() && validateRePassword();
+		return flag && queryBynewPassword() && queryByrePassword();
 
 	}
 </script>
 </head>
-<body background="./imgs/11.jpg">
-	<br />
-	<br />
-	<br />
-	<br />
-	<center>
-		<form name="changepassword" action="AdminServlet?action=ChangePassword" method="post"
-			onsubmit="return test();">
-			<table width="300px" height="280px" border="1px" bordercolor="pink"
-				cellspacing="0">
-				<caption align="top">
-					<h1>
-						<font color="red">修改管理员密码</font>
-					</h1>
-					<hr size="2px" color="red" width="600px" />
-				</caption>
-				<tr align="center">
-					<td>原&nbsp;&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;&nbsp;码</td>
-					<td><input name="password" type="password"
-						onblur="validatepassword()" /><span id="pwMsg"></span></td>
-				</tr>
-				<tr align="center">
-					<td>新&nbsp;&nbsp;&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;&nbsp;码</td>
-					<td><input name="newpassword" type="password"
-						onblur="validateNewPassword()" /><span id="npwMsg"></span></td>
-				</tr>
-				<tr align="center">
-					<td>确认新密码</td>
-					<td><input name="repassword" type="password"
-						/ onblur="validateRePassword()"><span id="rpwMsg"></span></td>
-				</tr>
-				<tr align="center">
-					<td colspan="2"><input type="submit" value="确认修改" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input
-						type="reset" value="重新填写" /></td>
-				</tr>
-			</table>
+<body background="imgs/08.jpg">
+	<div class="container">
+		<h1 align="center">修改密码</h1>
+		<hr width="1000px">
+		<form name="changepassword" action="changePassword" class="form-horizontal" method="post" onsubmit="return rest()">
+		
+		
+			<div class="form-group">
+				<label for="password" class="col-sm-4 control-label">原密码</label>
+				<div class="col-sm-4">
+					<input name="password" type="password" onblur="queryByPassword()" class="form-control" id="password"/>
+					<span id="pwMsg"></span>
+				</div>	
+			</div>
+			
+			
+			<div class="form-group">
+				<label for="newpassword" class="col-sm-4 control-label">新密码</label>
+				<div class="col-sm-4">
+					<input type="password" name="newpassword" class="form-control" id="newpassword" onblur="queryBynewPassword()"/>
+					<span id="npwMsg"></span>
+				</div>	
+			</div>
+			
+			<div class="form-group">
+				<label for="rePassword" class="col-sm-4 control-label">确认密码</label>
+				<div class="col-sm-4">
+					<input type="password" name="rePassword" class="form-control" id="rePassword" onblur="queryByrePassword()"/>
+					<span id="rpwMsg"></span>
+				</div>	
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-offset-4 col-sm-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type="submit" class="btn btn-info">点击修改</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<button type="reset" class="btn btn-info">重新填写</button>
+				</div>
+			</div>
+			
+			
 		</form>
-	</center>
+	</div>
 </body>
 </html>

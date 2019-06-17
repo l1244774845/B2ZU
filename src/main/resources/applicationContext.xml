@@ -5,7 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
-
+ 
 	<!-- 1.基于注解的自动扫描 -->
 	<context:component-scan base-package="com.oracle.*">
 		<!-- spring 管理的 service和responsitory -->
@@ -25,7 +25,7 @@
 	</bean>
 
 	<!-- 4.配置sqlSessionFactory -->
-	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+ 	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<!-- 注入数据源 -->
 		<property name="dataSource" ref="dataSource"></property>
 		<!-- 引入mybatis配置文件 -->

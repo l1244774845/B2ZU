@@ -28,8 +28,17 @@
 <property name="suffix" value=".jsp"></property>
 </bean>
 
+<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设定默认编码 -->
+		<property name="defaultEncoding" value="UTF-8"></property>
+		<!-- 设定文件上传的最大值5MB，5*1024*1024 -->
+		<property name="maxUploadSize" value="5242880"></property>
+</bean>
+
 <!--Springmvc 默认是不支持js和css 需要开启对js和css 的支持  -->
 
-<mvc:annotation-driven/>
+ <mvc:annotation-driven/>
 <mvc:default-servlet-handler/>
+
 </beans>

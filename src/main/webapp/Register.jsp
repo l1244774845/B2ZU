@@ -13,298 +13,150 @@
 <script type="text/javascript" src="bootstrap/js/jquery.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="bootstrap/js/bootstrapValidator.js"></script>
-
-<c:if test="${!(empty usernameisTrue) }">
-
-	<script type="text/javascript">
-		alert("${usernameisTrue}");
-	</script>
-	<c:remove var="usernameisTrue" scope="session" />
-</c:if>
 <title>注册</title>
 <script type="text/javascript" src="js/ajax.js"></script>
-<script type="text/javascript">
-	//window.onload=function(){
-    var flage1=false;
-	var flage2=false;
-	var flage3=false;
-	var flage4=false;
-	var flage5=false;
-	var flage6=false;
-		
-	function validatename() {
-
-		var name = document.register.name;
-
-		nameReg = /^[\u0391-\uFFE5]+$/;
-
-		var flag1 = nameReg.test(name.value);
-
-		var nameMsg = document.getElementById("nameMsg");
-
-		if (flag1) {
-
-			nameMsg.style.color = "green";
-
-			nameMsg.innerHTML = "姓名合法";
-
-			flage1= true;
-
-		} else {
-
-			nameMsg.style.color = "red";
-
-			nameMsg.innerHTML = "姓名不合法";
-
-			flage1= false;
-		}
-	}
-
-	function validateaccount() {
-
-		var account = document.register.account;
-		
-		var xmlhttp = getXMLHttpRequest();
-
-		xmlhttp.open("POST", "AdminServlet", true);
-
-		xmlhttp.setRequestHeader("Content-type",
-				"application/x-www-form-urlencoded");
-
-		xmlhttp.send("action=validateaccount&account=" + account.value);
+ <script type="text/javascript">
+	$(function() {
+		$(".form-horizontal").bootstrapValidator({
 
 
-		Reg = /^[a-zA-Z0-9_-]{4,16}$/;
+					feedbackIcons : {
 
-		var accountMsg = document.getElementById("accountMsg");
 
-		if (Reg.test(account.value)) {
+						valid : "glyphicon glyphicon-ok",
+						invalid : "glyphicon glyphicon-remove",
+						validating : "glyphicon glyphicon-refresh"
+					},
 
-			xmlhttp.onreadystatechange = function() {
 
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					fields : {
 
-					var content = xmlhttp.responseText;
 
-					//alert(content);
+						username : {
 
-					var span = document.getElementById("accountMsg");
 
-					if (content == "0") {//用户名没有注册，提示先注册
+							validators : {
 
-						span.style.color = "green";
 
-						span.innerHTML = "用户名不存在,可以注册";
+								notEmpty : {
 
-						span.focus();
 
-						flage2 = true;
+									message : '用户名不能为空'
 
-					} else {//用户名存在，可以登录
 
-						span.style.color = "red";
+								},
 
-						span.innerHTML = "用户名已存在";
 
-						flage2 = false;
+								regexp : {
 
+
+									regexp : /^[A-z0-9_]{3,25}$/,
+									message : '用户名必须由3-25个英文字母、数字和下划线组成'
+
+
+								},
+
+
+								remote : {
+									
+									
+									message : '该用户已被注册，请重新输入',
+
+
+									url : "validate.action",
+
+
+									type : 'post',
+
+
+									data : function(validator) {
+
+
+										return {
+
+
+											username : $("input[name=username]").val()
+										}
+									}
+								}
+
+
+							}
+						}
 					}
-
-				}
-
-			}
-
-		} else {
-
-			accountMsg.style.color = "red";
-
-			accountMsg.innerHTML = "账户不合法";
-
-		    flage2= false;
-		}
-	}
-
-	function validatePassword() {
-
-		var password = document.register.password;
-
-		var reg = /^(\w|\W){6,15}$/;
-
-		var passwordMsg = document.getElementById("passwordMsg");
-
-		if (reg.test(password.value)) {
-
-			passwordMsg.style.color = "green";
-
-			passwordMsg.innerHTML = "密码合法";
-
-			flage3= true;
-
-		} else {
-
-			passwordMsg.style.color = "red";
-
-			passwordMsg.innerHTML = "密码不合法";
-
-			flage3= false;
-		}
-
-	}
-
-	function validaterepassword(){
-		
-		var password=document.register.password;
-		
-	    var repassword=document.register.repassword;
-		
-		var passwordMsg=document.getElementById("passwordMsg");
-		
-		if(repassword.value==password.value){
-			
-			repasswordMsg.style.color="green";
-			
-			repasswordMsg.innerHTML="两次密码一致";
-			
-			flage4= true;
-		}else{
-			
-			repasswordMsg.style.color="red";
-			
-			repasswordMsg.innerHTML="两次密码不一致";
-			
-			repassword.focus();
-			
-			flage4= false;
-		}
-		
-		
-	}
-	function validatephone() {
-
-		var phone = document.register.phone;
-
-     	var reg = /^1[3-9][0-9]{9}$/;
-
-		var phoneMsg = document.getElementById("phoneMsg");
-
-		if (reg.test(phone.value)) {
-
-			phoneMsg.style.color = "green";
-
-			phoneMsg.innerHTML = "电话号码正确";
-
-			flage5= true;
-
-		} else {
-
-			phoneMsg.style.color = "red";
-
-			phoneMsg.innerHTML = "电话号码格式不对";
-
-			flage5= false;
-		}
-	}
-	
-	 function validatetouxiang() {
-
-			var touxiang = document.register.touxiang;
-
-			var flag = false; //状态
-
-			var arr = [ "jpg", "png", "gif" ];
-
-			var index = touxiang.value.lastIndexOf(".");
-
-			var ext = touxiang.value.substr(index + 1);
-			//循环比较
-			for (var i = 0; i < arr.length; i++) {
-
-				if (ext == arr[i]) {
-
-					flag = true; //一旦找到合适的，立即退出循环
 					
-					break;
-				}
-			}
-			//条件判断
-			if (flag) {
-				
-				touxiangMsg.style.color = "green";
-
-				touxiangMsg.innerHTML = "头像格式合法";
-				
-				flage6=true;
-				
-			} else {
-				
-				touxiangMsg.style.color = "red";
-
-				touxiangMsg.innerHTML = "头像格式不合法";
-				
-				flage6=false;
-	}
-};
-
-	function jiaoyan() {
-
-		return flage1 && flage2 && flage3 && flage4 && flage5 && flage6;
-	}
-</script>
+					
+				});
+	}); 
+</script> 
 </head>
-<body>
-<table>
-		<tr background="imgs/15.jpg">
-			<td width="50%"></td>
-			<td align="center">
-				<form action="AdminHandler?action=register" method="post"
-					name="register" enctype="multipart/form-data"
-					onsubmit="return jiaoyan()">
-					<table frame="box" width="600px" height="280px" bordercolor="white">
-						<tr>
-							<td colspan="2">&nbsp;&nbsp;&nbsp;<font color="black"
-								size="4"><b>注册账号</b></font></td>
-						</tr>
-						
-						<tr>
-							<td align="center"><font color="black"><b>头&nbsp;&nbsp;&nbsp;&nbsp;像:</b></font></td>
-							<td><input type="file" name="touxiang" onblur="validatetouxiang()" /></td>
-							<td width="300px"><span id="touxiangMsg"></span></td>
-						</tr>
-						
-						<tr>
-							<td align="center"><font color="black"><b>姓&nbsp;&nbsp;&nbsp;&nbsp;名:</b></font></td>
-							<td><input type="text" name="name" onblur="validatename()" /></td>
-							<td width="300px"><span id="nameMsg"></span></td>
-						</tr>
-						<tr>
-							<td align="center"><font color="black"><b>帐&nbsp;&nbsp;&nbsp;&nbsp;号:</b></font></td>
-							<td><input type="text" name="account" onblur="validateaccount()" /></td>
-								<td width="300px"><span id="accountMsg"></span></td>
-						</tr>
-						<tr>
-							<td align="center"><font color="black"><b>密&nbsp;&nbsp;&nbsp;&nbsp;码:</b></font></td>
-							<td><input type="password" name="password" onblur="validatePassword()" /></td>
-								<td width="300px"><span id="passwordMsg"></span></td>
-						</tr>
-						<tr>
-							<td align="center"><font color="black"><b>确认密码:</b></font></td>
-							<td><input type="password" name="repassword" onblur="validaterepassword()"/></td>
-								<td width="300px"><span id="repasswordMsg"></span></td>
-								
-						</tr>
-						<tr>
-							<td align="center"><font color="black"><b>手机号码:</b></font></td>
-							<td><input type="text" name="phone" onblur="validatephone()" /></td>
-							<td width="300px"><span id="phoneMsg"></span></td>
-						</tr>
-						<tr>
-				
-							<td><a href="Login.jsp"><input type="submit" value="立即注册"/></a></td>
-						</tr>
-					</table>
-				</form>
-			</td>
-		</tr>
-		</table>
+<body background="imgs/08.jpg">
+
+	<div class = "container">
+		<h1 align = "center">图书管理系统----管理员注册</h1>
+		<hr width="1000px">
+		<form name="register" action="register" class="form-horizontal" method="post" 
+			enctype="multipart/form-data">
+		
+			<!-- 头像 -->
+			<div class="form-group">
+				<label for="touxiang" class="col-sm-4 control-label">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像</label>
+				<div class="col-sm-4">
+					<input type="file" class="form-control" id="touxaing"
+						name="touxiang" />
+				</div>	
+			</div>
+		
+			<!-- 姓名 -->
+			<div class="form-group">
+				<label for="name" class="col-sm-4 control-label">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="name"
+						name="name"/>
+				</div>	
+			</div>
+			
+			<!-- 手机 -->
+			<div class="form-group">
+				<label for="phone" class="col-sm-4 control-label">手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="phone"
+						name="phone"/>
+				</div>	
+			</div>
+			
+			
+			<!-- 用户名 -->
+			<div class="form-group">
+				<label for="username" class="col-sm-4 control-label">用&nbsp;&nbsp;户&nbsp;&nbsp;名</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="username"
+						name="username"/>
+				</div>	
+			</div>
+			
+			<!-- 密码 -->
+			<div class="form-group">
+				<label for="password" class="col-sm-4 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+				<div class="col-sm-4">
+					<input type="password" class="form-control" id="password"
+						name="password"/>
+				</div>	
+			</div>
+			
+			<div class="form-group">
+				<div class="col-sm-offset-5 col-sm-4">
+					<button type="submit" class="btn btn-info">点击注册</button>
+				</div>
+			</div>
+		
+		</form>
+		
+		<div class="col-sm-offset-5 col-sm-4">
+			<a href="Login.jsp">已经是管理员？直接登录</a>
+		</div>
+	
+	</div>
+		
 </body>
 </html>
