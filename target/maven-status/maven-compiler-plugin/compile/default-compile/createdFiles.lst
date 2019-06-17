@@ -1,0 +1,12 @@
+com\oracle\web\bean\Book.class
+com\oracle\web\mapper\UserMapper.class
+com\oracle\web\bean\PageBean.class
+com\oracle\web\mapper\AdminMapper.class
+com\oracle\web\bean\User.class
+com\oracle\web\mapper\FenleiMapper.class
+com\oracle\web\service\Impl\FenleiServiceImpl.class
+com\oracle\web\mapper\BookMapper.class
+com\oracle\web\controller\FenleiHandler.class
+com\oracle\web\bean\Admin.class
+com\oracle\web\bean\Fenlei.class
+com\oracle\web\service\FenleiService.class

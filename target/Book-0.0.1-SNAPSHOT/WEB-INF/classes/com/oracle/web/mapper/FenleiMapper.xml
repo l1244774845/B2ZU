@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.web.mapper.FenleiMapper">
+  <resultMap id="BaseResultMap" type="com.oracle.web.bean.Fenlei">
+    <id column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="fname" jdbcType="VARCHAR" property="fname" />
+  </resultMap>  
+ 
+    <delete id="deleteByPrimaryKey"  parameterType="java.lang.String">
+          delete from fenlei where fenlei.fid in
+           <foreach item="arr" collection="array"  index="no" open="(" separator="," close=")">
+             #{arr}
+          </foreach> 
+  </delete>
+  <insert id="insert" parameterType="com.oracle.web.bean.Fenlei">
+
+    insert into fenlei (fid, fname)
+    values (#{fid,jdbcType=INTEGER}, #{fname,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.oracle.web.bean.Fenlei">
+  
+    update fenlei
+    set fname = #{fname,jdbcType=VARCHAR}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   
+    select fid, fname
+    from fenlei
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+  
+    select fid, fname
+    from fenlei
+  </select>
+  
+  
+  <select id="counts"  parameterType="int" resultType="int">
+	 SELECT COUNT(*) FROM  fenlei
+	</select>
+   
+	
+	<select id="selectAllByPageHelper" parameterType="int" resultMap="showByPage2">
+	select * from fenlei  order by fenlei.fid desc 
+	</select>
+	<resultMap  id="showByPage2" type="com.oracle.web.bean.Fenlei" >
+		<id column="fid" jdbcType="INTEGER" property="fid" />
+    <result column="fname" jdbcType="VARCHAR" property="fname" />
+	</resultMap>
+	
+	<select id="selectFenleiByFname" parameterType="String" resultType="com.oracle.web.bean.Fenlei">
+    select * from fenlei  where fname=#{fname}
+  </select>
+  
+	<select id="selectOutPutIds"  parameterType="list" resultType="com.oracle.web.bean.Fenlei">	<!-- 自定义 选择导出 -->
+		select * from fenlei 
+    
+     <where>
+		fenlei.fid in
+		<foreach collection="list" item="id" open="(" separator="," close=")" >
+		     #{id}
+	 </foreach>
+	 
+   </where> 
+		 order by fenlei.fid desc
+	</select>
+	
+	
+</mapper>

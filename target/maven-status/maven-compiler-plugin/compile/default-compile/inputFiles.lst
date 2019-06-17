@@ -1,0 +1,12 @@
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\bean\Fenlei.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\bean\PageBean.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\mapper\UserMapper.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\mapper\BookMapper.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\mapper\FenleiMapper.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\bean\Admin.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\mapper\AdminMapper.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\service\FenleiService.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\bean\Book.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\bean\User.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\service\Impl\FenleiServiceImpl.java
+D:\mvn-workspace\Book\src\main\java\com\oracle\web\controller\FenleiHandler.java
